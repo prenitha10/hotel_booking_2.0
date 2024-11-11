@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Booking = new mongoose.Schema({
+const BookingSchema = new mongoose.Schema({
   adults: {
     type: Number,
     required: true
@@ -8,7 +8,7 @@ const Booking = new mongoose.Schema({
   children: {
     type: Number
   },
-  roomsId: {
+  roomId: {
     type: String,
     required: true, default: 1
   },
@@ -23,5 +23,5 @@ const Booking = new mongoose.Schema({
   comment: { type: String },
 });
 
-const Booking = mongoose.model('Booking', Booking);
-module.exports = Room;
+const Booking = mongoose.model('Booking', BookingSchema);
+module.exports = Booking;

@@ -62,6 +62,19 @@ function Deluxe() {
             setCounts((next=>({...next,[key]:next[key]-1})));
         }
     }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const bookingData = {
+            adults: counts.adults,
+            children: counts.children,
+            rooms: counts.rooms,
+            startDate: value.startDate,
+            endDate: value.endDate,
+            comment: comment
+        };
+        handleBookingSubmit(bookingData);
+    };
+
 
     return (
         <div>
@@ -89,7 +102,7 @@ function Deluxe() {
                 <div className="flex flex-col items-center justify-center border-2 border p-4 rounded-lg bg-booking">
                     <div className="flex items-center justify-center bg-black text-white opacity-70 p-4 rounded-md w-7/8 h-4/5">
                     
-                        <form className="max-w-sm mx-auto">
+                        <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
                             <h1 className="text-center font-bold">BOOKING</h1>
                             <label className="text-lex text-white font-medium font-bold">Guests</label><br></br>
                             <div className="space-y-4">
