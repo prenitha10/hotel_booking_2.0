@@ -29,7 +29,7 @@ const profile = [
 function Header() {
   return (
     <>
-      <div className="grid row-span-5 grid-flow-col bg-gray-50 text-10 p-3">
+      <div className="flex flex-row items-center justify-between row-span-5 grid-flow-col bg-gray-50 text-10 p-3">
         {
           profile.map((val, index) => (
             <div className="flex justify-end space-x-2 text-xl font-semibold">

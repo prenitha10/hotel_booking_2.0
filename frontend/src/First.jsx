@@ -13,7 +13,7 @@ function First(){
                 </div>                
                 <div className='font-lex_sm text-[25px] text-white'>A Place to Experience and Enjoy Life</div><br></br>
                 <button className=" bg-white text-black text-[30px] font-bold py-3 px-6 rounded" onClick={()=>{nav('/home')}}>
-                    EXPLORE
+                   <div className="opacity-100">EXPLORE</div> 
                 </button>
             </div>
         );    

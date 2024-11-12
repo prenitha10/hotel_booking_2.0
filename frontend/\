@@ -39,7 +39,7 @@ function Home(){
                 <div className="font-lex text-[30px] font-bold mb-6">
                     Our Facilities
                 </div>
-                <div className="flex flex-row font-lex_sm text-black space-x-8">
+                <div className="flex flex-row justify-between overflow-x-auto font-lex_sm text-black w-[80vw] space-x-8">
                     <div className="flex flex-col">
                         <img className="h-50 w-400" src="\src\images\fitness.png"></img>
                         <h3>Fitness Facilities</h3>

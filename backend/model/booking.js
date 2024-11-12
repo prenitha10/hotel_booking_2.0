@@ -10,7 +10,7 @@ const BookingSchema = new mongoose.Schema({
   },
   roomId: {
     type: String,
-    required: true, 
+    required: true,
   },
   startDate: {
     type: Date,
@@ -20,13 +20,9 @@ const BookingSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  comment: 
-  { 
+  comment:
+  {
     type: String
-   },
-  bookingId:{
-    type:String,
-    required:true
   },
 });
 
