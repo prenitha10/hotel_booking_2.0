@@ -9,7 +9,7 @@ const roomType = {
   business : 'business'
 }
 
-const Room = new mongoose.Schema({
+const RoomSchema = new mongoose.Schema({
   roomId: {
     type: String,
     required: true
@@ -29,5 +29,5 @@ const Room = new mongoose.Schema({
   }
 });
 
-const RoomSchema = mongoose.model('Room', Room);
-module.exports = RoomSchema;
+const Room = mongoose.model('Room', RoomSchema);
+module.exports = Room;
