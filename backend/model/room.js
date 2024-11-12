@@ -1,16 +1,17 @@
+
 const mongoose = require('mongoose');
 
 const roomType = {
-  deluxe : 'deluxe',
-  familySuite : 'familySuite',
-  standard : 'standard',
-  superior : 'superior',
-  penthouse : 'penthouse',
-  business : 'business'
+  deluxe: 'Deluxe',
+  familySuite: 'Family Suite',
+  standard: 'Standard',
+  superior: 'Superior',
+  penthouse: 'Penthouse',
+  business: 'Business'
 }
 
 const RoomSchema = new mongoose.Schema({
-  roomId: {
+  roomNo: {
     type: String,
     required: true
   },
@@ -19,15 +20,31 @@ const RoomSchema = new mongoose.Schema({
     enum: Object.values(roomType),
     required: true
   },
+  description: {
+    type: String,
+    required: true
+  },
+  amenities: {
+    type: [String],
+    required: true
+  },
   imageUrl: {
     type: String,
     required: true
   },
   bookingStatus: {
     type: Boolean,
+    required: true,
+    default: false
+  },
+  price: {
+    type: Number,
     required: true
   }
+}, {
+  timestamps: true
 });
 
 const Room = mongoose.model('Room', RoomSchema);
 module.exports = Room;
+

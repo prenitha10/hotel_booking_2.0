@@ -4,24 +4,32 @@ const uuid4 = require('uuid4');
 const moment = require('moment');
 //post
 const createRoom = async (req, res) => {
-  const { roomId, roomType, imageUrl, bookingStatus } = req.body;
+  const { roomNo, roomType, imageUrl, description, amenities, bookingStatus, price} = req.body;
 
-  if (!roomId || !bookingStatus || !roomType || !imageUrl)
+  if (!roomNo || !amenities || !roomType || !description || !imageUrl || !bookingStatus || !price)
     return res.status(400).json({ error: "Null values are entered" });
   try {
-    const existingRoom = await Rooms.findOne({ roomId });
+    const existingRoom = await Rooms.findOne({ roomNo});
     if (existingRoom)
       return res.status(400).json({ error: "Room with this ID already exists" });
 
-    const createRoom = await Rooms.create({ roomId, roomType, imageUrl, bookingStatus });
-    return res.status(201).json({ message: "Rooms created successfully ", room: createRoom });
-
+    const createRoom = await Rooms.create({ roomNo, roomType, description, amenities, imageUrl, bookingStatus, price});
+    return res.status(200).json({ message: "Rooms created successfully "});
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-//Post
+
+const getAllRoom = async (req, res) => {
+  try {
+    const room = await Rooms.find();
+    return res.status(200).json(room);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server error" });
+  }
+}
 
 const bookRoom = async (req, res) => {
   const { adults, children, roomId, startDate, endDate, comment } = req.body;
@@ -112,4 +120,4 @@ const cancelBooking = async (req, res) => {
   }
 
 }
-module.exports = { createRoom, bookRoom, updateRooms, cancelBooking };
+module.exports = { createRoom, bookRoom, updateRooms, cancelBooking, getAllRoom };

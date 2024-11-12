@@ -1,47 +1,13 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faBed, faWifi, faTv, faShower, faConciergeBell, faUtensils, faBroom } from '@fortawesome/free-solid-svg-icons';
 import Header from './Header';
 import Footer from './Footer';
 import Datepicker from "react-tailwindcss-datepicker";
+import moment from 'moment';
 import axios from 'axios';
-
-const profile = [
-  {
-    label: "2-3 People",
-    icon: <FontAwesomeIcon icon={faUsers} size="1x" />,
-  },
-  {
-    label: "King Size Bed",
-    icon: <FontAwesomeIcon icon={faBed} size="1x" />,
-  },
-  {
-    label: "Complimentary high-speed Wi-Fi",
-    icon: <FontAwesomeIcon icon={faWifi} size="1x" />,
-  },
-  {
-    label: "Flat-screen TV",
-    icon: <FontAwesomeIcon icon={faTv} size="1x" />,
-  },
-  {
-    label: "En-suite bathroom with luxury toiletries",
-    icon: <FontAwesomeIcon icon={faShower} size="1x" />,
-  },
-  {
-    label: "24/7 room service",
-    icon: <FontAwesomeIcon icon={faConciergeBell} size="1x" />,
-  },
-
-  {
-    label: "Complimentary breakfast",
-    icon: <FontAwesomeIcon icon={faUtensils} size="1x" />,
-  },
-  {
-    label: "Daily housekeeping",
-    icon: <FontAwesomeIcon icon={faBroom} size="1x" />,
-  }
-];
 
 const guestOptions = [
   { label: "Adults", key: "adults" },
@@ -49,14 +15,16 @@ const guestOptions = [
   { label: "Rooms", key: "rooms" }
 ];
 
-function Deluxe() {
+function RoomPage() {
   const [value, setValue] = useState({
-    startDate: "25-03-2005",
-    endDate: "26-04-2005"
+    startDate: new Date(),
+    endDate: moment().add(1, 'days').toDate()
   });
+  const location = useLocation();
+  const { room } = location.state || {};
   const [counts, setCounts] = useState({ adults: 0, children: 0, rooms: 1 });
   const [comment, setComment] = useState('');
-  const [bookingId, setBookingId] = useState('');
+  const [successMessage, setSuccessMessage] = useState(false);
 
   const increment = (key) => {
     setCounts(prev => ({ ...prev, [key]: prev[key] + 1 }));
@@ -68,49 +36,63 @@ function Deluxe() {
     }
   };
 
+  const handleDateChange = (newValue) => {
+    if (newValue && newValue.startDate && newValue.endDate) {
+      setValue({
+        startDate: new Date(newValue.startDate), 
+        endDate: new Date(newValue.endDate)
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/bookRoom', {
         adults: counts.adults,
         children: counts.children,
-        roomId: "6733437b4086f43c02af641b",
+        roomId: room._id,
         rooms: counts.rooms,
-        startDate: value.startDate,
-        endDate: value.endDate,
+        startDate: moment(value.startDate).format("DD-MM-YYYY"),
+        endDate: moment(value.endDate).format("DD-MM-YYYY"),
         comment: comment
       });
 
       if (response.status === 200) {
-        setBookingId(response.data.bookingId);  // Assuming booking ID comes as response.data.bookingId
-        setIsModalOpen(true);  // Open modal on success
+        setSuccessMessage(true); // Show success message
+
+        // Hide success message after 2 seconds
+        setTimeout(() => {
+          setSuccessMessage(false);
+        }, 2000);
       }
     } catch (error) {
       console.error("Error during booking:", error);
     }
   };
 
+
   return (
     <div>
       <Header />
       <div>
-        <p className="p-2 text-[30px] font-bold text-center">Deluxe Room</p>
+        <p className="p-2 text-[30px] font-bold text-center">{room.roomType + " Room"}</p>
       </div>
       <div className="pl-10 pr-10 grid grid-cols-2 gap-10">
         <div className="flex flex-col items-center justify-center border p-4 rounded-lg">
-          <img className="h-80 w-120" src="/src/images/deluxe.png" alt="Deluxe Room" />
+          <img className="h-80 w-120" src={"data:image/png;base64," + room.imageUrl} alt="Deluxe Room" />
           <p className="text-[15px] text-center mt-3">
-            Experience unmatched comfort in our spacious Deluxe Room, featuring elegant decor and modern conveniences for a perfect stay.
+            {room.description}
           </p>
           <p className="text-[20px] text-center font-bold">Amenities</p>
           <div>
-            {profile.map((val, index) => (
+            {room.amenities.map((val, index) => (
               <div key={index} className="flex justify-center space-x-5">
-                {val.icon}<span>{val.label}</span>
+                <ul>{val}</ul>
               </div>
             ))}
           </div>
-          <p className="font-bold">Rs.2000/- only with taxes</p>
+          <p className="font-bold">{"Rs. " + room.price + " only with taxes"}</p>
         </div>
         <div className="flex flex-col items-center justify-center border p-4 rounded-lg bg-booking">
           <div className="flex items-center justify-center bg-black text-white opacity-70 p-4 rounded-md w-7/8 h-4/5">
@@ -136,6 +118,12 @@ function Deluxe() {
               <br />
               <button type="submit" className="w-full bg-red-600 text-white mt-4 p-2 rounded-lg font-bold">Submit</button>
             </form>
+      {successMessage && (
+        <div className="success-message">
+          Booking Successful!
+        </div>
+      )}
+      
           </div>
         </div>
       </div>
@@ -145,4 +133,4 @@ function Deluxe() {
   );
 }
 
-export default Deluxe;
+export default RoomPage;

@@ -6,9 +6,12 @@ const db = require('./db/connection');
 const bodyParser = require('body-parser');
 
 const port = 5000;
+
 const app=express();
+
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
+
 app.use(login);
 app.use(room);
 

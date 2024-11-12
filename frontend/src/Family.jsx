@@ -64,7 +64,7 @@ function Family() {
         startDate: null,
         endDate: null
     });
-    const[counts,setCounts]=useState({adults:0,children:0,rooms:1})
+    const[counts,setCounts]=useState({adults:0,children:1,rooms:1})
     const increment =(key)=>{
         setCounts((prev=>({...prev,[key]:prev[key]+1})));
     }
